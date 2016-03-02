@@ -15,6 +15,7 @@ namespace UWP_04
         public async static Task<RootObjectForecast> GetWeatherForecast(double lat, double lon)
         {
             var http = new HttpClient();
+            // Wow, my API key in plain text! Don't hack me please!
             var url = String.Format("http://api.openweathermap.org/data/2.5/forecast?lat={0}&lon={1}&appid=5cac47538f90d19879ecaa7c8c7fab67&units=metric", lat, lon);
             var response = await http.GetAsync(url);
             var result = await response.Content.ReadAsStringAsync();
