@@ -47,6 +47,9 @@ namespace UWP_04
 
                 AfterAfterTomorrowTemp.Text = ((int)myWeatherForecast.list[24].main.temp).ToString();
                 AfterAfterTomorrowMain.Text = myWeatherForecast.list[24].weather[0].main;
+
+                ProgressRing.IsActive = false;
+                ProgressRing.Visibility = Visibility.Collapsed;
             }
             catch
             {

@@ -13,6 +13,7 @@
 
         <TextBlock Name="City"
                    Margin="10"
+                   Text="WaitForIt"
                    RelativePanel.AlignHorizontalCenterWithPanel="True"
                    FontSize="36"
                    Foreground="White"/>
@@ -61,6 +62,17 @@
                    Margin="10"
                    RelativePanel.Below="AfterTomorrowTemp"
                    RelativePanel.AlignHorizontalCenterWith="AfterAfterTomorrowTemp" />
+
+        <ProgressRing IsActive="True"
+                      Visibility="Visible"
+                      Grid.Row="1"
+                      Name="ProgressRing"
+                      HorizontalAlignment="Center"
+                      RelativePanel.Below="Weather"
+                      RelativePanel.AlignHorizontalCenterWithPanel="True"
+                      Margin="10"
+                      Width="200"
+                      Height="200" />
 
         <Image Grid.Row="1"
                Name="ResultImage"
