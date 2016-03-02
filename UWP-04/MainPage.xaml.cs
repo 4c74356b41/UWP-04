@@ -50,10 +50,14 @@ namespace UWP_04
 
                 ProgressRing.IsActive = false;
                 ProgressRing.Visibility = Visibility.Collapsed;
+
+                
             }
             catch
             {
-                Weather.Text = "Unable to get weather at this time";
+                Weather.Text = "Unable to get weather at this time, please try again later.";
+                City.Text = "Something went wrong :(";
+                ProgressRing.Visibility = Visibility.Collapsed;
             }
         }
     }

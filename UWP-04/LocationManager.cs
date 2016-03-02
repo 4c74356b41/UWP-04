@@ -15,9 +15,11 @@ namespace UWP_04
 
             if (accessStatus != GeolocationAccessStatus.Allowed) throw new Exception();
 
-            var geolocator = new Geolocator { DesiredAccuracyInMeters = 0 };
+            var geolocator = new Geolocator { DesiredAccuracyInMeters = 2500 };
 
-            var position = await geolocator.GetGeopositionAsync();
+            var position = await geolocator.GetGeopositionAsync(maximumAge: TimeSpan.FromMinutes(30),
+            timeout: TimeSpan.FromSeconds(10)
+            );
 
             return position;
         }
