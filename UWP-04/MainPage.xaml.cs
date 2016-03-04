@@ -29,35 +29,61 @@ namespace UWP_04
             try
             {
                 Refresh.Visibility = Visibility.Collapsed;
+                ProgressRing.IsActive = true;
+                ProgressRing.Visibility = Visibility.Visible;
+                ResultImage.Visibility = Visibility.Collapsed;
+                TomorrowMain.Visibility = Visibility.Collapsed;
+                AfterTomorrowMain.Visibility = Visibility.Collapsed;
+                AfterAfterTomorrowMain.Visibility = Visibility.Collapsed;
+                TomorrowTemp.Visibility = Visibility.Collapsed;
+                AfterTomorrowTemp.Visibility = Visibility.Collapsed;
+                AfterAfterTomorrowTemp.Visibility = Visibility.Collapsed;
+
                 var position = await LocationManager.GetPosition();
 
-                OpenWeatherMapProxyForecast.RootObjectForecast myWeatherForecast =
-                    await OpenWeatherMapProxyForecast.GetWeatherForecast(position.Coordinate.Latitude, position.Coordinate.Longitude);
+                WeatherApiProxy.RootObjectApi myWeatherForecast =
+                    await WeatherApiProxy.GetWeather(position.Coordinate.Latitude, position.Coordinate.Longitude);
 
-                string icon = String.Format("ms-appx:///Assets/{0}.png", myWeatherForecast.list[0].weather[0].icon);
-                ResultImage.Source = new BitmapImage(new Uri(icon, UriKind.Absolute));
-                City.Text = myWeatherForecast.city.name;
-                Celcius.Text = "Temperatura: °" + ((int)myWeatherForecast.list[0].main.temp).ToString();
-                Weather.Text = "Como hace hoy: " + myWeatherForecast.list[0].weather[0].description;
+                string iconBig = String.Format("ms-appx:///Assets/{0}.png", myWeatherForecast.forecastlist[0].icon);
+                ResultImage.Source = new BitmapImage(new Uri(iconBig, UriKind.Absolute));
+                string icon1 = String.Format("ms-appx:///Assets/{0}.png", myWeatherForecast.forecastlist[1].icon);
+                TomorrowMain.Source = new BitmapImage(new Uri(icon1, UriKind.Absolute));
+                string icon2 = String.Format("ms-appx:///Assets/{0}.png", myWeatherForecast.forecastlist[2].icon);
+                AfterAfterTomorrowMain.Source = new BitmapImage(new Uri(icon2, UriKind.Absolute));
+                string icon3 = String.Format("ms-appx:///Assets/{0}.png", myWeatherForecast.forecastlist[3].icon);
+                AfterTomorrowMain.Source = new BitmapImage(new Uri(icon3, UriKind.Absolute));
 
-                TomorrowTemp.Text = ((int)myWeatherForecast.list[8].main.temp).ToString();
-                TomorrowMain.Text = myWeatherForecast.list[8].weather[0].main;
+                City.Text = myWeatherForecast.city;
+                Weather.Text = "°" + (myWeatherForecast.forecastlist[0].temp).ToString() + ", " + myWeatherForecast.forecastlist[0].descr;
+                ForecastTime.Text = myWeatherForecast.time;
 
-                AfterTomorrowTemp.Text = ((int)myWeatherForecast.list[16].main.temp).ToString();
-                AfterTomorrowMain.Text = myWeatherForecast.list[16].weather[0].main;
+                TomorrowTemp.Text = "°" + (myWeatherForecast.forecastlist[1].temp).ToString();
+                AfterTomorrowTemp.Text = "°" + (myWeatherForecast.forecastlist[2].temp).ToString();
+                AfterAfterTomorrowTemp.Text = "°" + (myWeatherForecast.forecastlist[3].temp).ToString();
 
-                AfterAfterTomorrowTemp.Text = ((int)myWeatherForecast.list[24].main.temp).ToString();
-                AfterAfterTomorrowMain.Text = myWeatherForecast.list[24].weather[0].main;
+                //TomorrowMain.Text = myWeatherForecast.forecastlist[1].descr;
+                //AfterTomorrowMain.Text = myWeatherForecast.forecastlist[2].descr;
+                //AfterAfterTomorrowMain.Text = myWeatherForecast.forecastlist[3].descr;
 
                 ProgressRing.IsActive = false;
                 ProgressRing.Visibility = Visibility.Collapsed;
                 Refresh.Visibility = Visibility.Visible;
+                ResultImage.Visibility = Visibility.Visible;
+                TomorrowMain.Visibility = Visibility.Visible;
+                AfterTomorrowMain.Visibility = Visibility.Visible;
+                AfterAfterTomorrowMain.Visibility = Visibility.Visible;
+                TomorrowTemp.Visibility = Visibility.Visible;
+                AfterTomorrowTemp.Visibility = Visibility.Visible;
+                AfterAfterTomorrowTemp.Visibility = Visibility.Visible;
+
+                myWeatherForecast = null;
 
             }
             catch
             {
                 Weather.Text = "Unable to get weather at this time, please try again later.";
                 City.Text = "Something went wrong :(";
+                ForecastTime.Visibility = Visibility.Collapsed;
                 ProgressRing.Visibility = Visibility.Collapsed;
                 Refresh.Visibility = Visibility.Visible;
             }
