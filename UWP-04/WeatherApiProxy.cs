@@ -15,7 +15,6 @@ namespace UWP_04
     {
         public async static Task<RootObjectApi> GetWeather(double lat, double lon)
         {
-
             var http = new HttpClient();
             http.Timeout = TimeSpan.FromMilliseconds(15000);
 
@@ -23,15 +22,10 @@ namespace UWP_04
             var response = await http.GetAsync(url);
             var result = await response.Content.ReadAsStringAsync();
             var data = JsonConvert.DeserializeObject<List<RootObjectApi>>(result);
-            //var serializer = new DataContractJsonSerializer(typeof(RootObjectApi));
-
-            //var ms = new MemoryStream(Encoding.UTF8.GetBytes(result));
-            //var data = (RootObjectApi)serializer.ReadObject(ms);
             
             return data[0];
         }
-
-
+        
         [DataContract]
         public class Forecastlist
         {
@@ -51,7 +45,6 @@ namespace UWP_04
             public string time { get; set; }
             [DataMember]
             public List<Forecastlist> forecastlist { get; set; }
-
         }
     }
 }
