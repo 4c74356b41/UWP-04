@@ -46,6 +46,10 @@ namespace UWP_04
                 WeatherApiProxy.RootObjectApi myWeatherForecast =
                     await WeatherApiProxy.GetWeather(position.Coordinate.Latitude, position.Coordinate.Longitude);
 
+                if (myWeatherForecast == null)
+                {
+                    throw new Exception();
+                }
                 string icon0 = String.Format("ms-appx:///Assets/{0}.png", myWeatherForecast.forecastlist[0].icon);
                 Day0i.Source = new BitmapImage(new Uri(icon0, UriKind.Absolute));
                 string icon1 = String.Format("ms-appx:///Assets/{0}.png", myWeatherForecast.forecastlist[1].icon);
@@ -82,7 +86,7 @@ namespace UWP_04
                 myWeatherForecast = null;
 
                 var tileContent = new Uri(uri);
-                var requestedInterval = PeriodicUpdateRecurrence.HalfHour;
+                var requestedInterval = PeriodicUpdateRecurrence.SixHours;
 
                 var updater = TileUpdateManager.CreateTileUpdaterForApplication();
                 updater.StartPeriodicUpdate(tileContent, requestedInterval);
