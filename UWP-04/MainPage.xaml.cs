@@ -6,6 +6,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI;
+using Windows.UI.Notifications;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -23,6 +24,7 @@ namespace UWP_04
         public MainPage()
         {
             this.InitializeComponent();
+            //handling status bar visibility
             var statusBar = Windows.UI.ViewManagement.StatusBar.GetForCurrentView();
             statusBar.ForegroundColor = Colors.White;
         }
@@ -31,11 +33,14 @@ namespace UWP_04
         {
             try
             {
+                //toggling visibility
                 ProgressRing.IsActive = true;
                 ProgressRing.Visibility = Visibility.Visible;
                 ToggleMe.Visibility = Visibility.Collapsed;
                 ToggleMeTwo.Visibility = Visibility.Collapsed;
 
+
+                //query api and output stuff
                 var position = await LocationManager.GetPosition();
 
                 WeatherApiProxy.RootObjectApi myWeatherForecast =
@@ -65,12 +70,24 @@ namespace UWP_04
                 Day3t.Text = "°" + (myWeatherForecast.forecastlist[3].temp).ToString();
                 Day4t.Text = "°" + (myWeatherForecast.forecastlist[4].temp).ToString();
 
+                //toggling visibility
                 ProgressRing.IsActive = false;
                 ProgressRing.Visibility = Visibility.Collapsed;
                 ToggleMe.Visibility = Visibility.Visible;
                 ToggleMeTwo.Visibility = Visibility.Visible;
 
+                var offset = DateTime.Now - DateTime.UtcNow;
+
+                var uri = String.Format("http://weatherap1.azurewebsites.net/tile/?city={0}&offset={1}", myWeatherForecast.city, offset.Hours.ToString());
                 myWeatherForecast = null;
+
+                var tileContent = new Uri(uri);
+                var requestedInterval = PeriodicUpdateRecurrence.HalfHour;
+
+                var updater = TileUpdateManager.CreateTileUpdaterForApplication();
+                updater.StartPeriodicUpdate(tileContent, requestedInterval);
+
+
             }
             catch
             {
