@@ -21,6 +21,7 @@ namespace UWP_04
 {
     public sealed partial class MainPage : Page
     {
+        bool livetile;
         public MainPage()
         {
             this.InitializeComponent();
@@ -80,17 +81,17 @@ namespace UWP_04
                 ToggleMe.Visibility = Visibility.Visible;
                 ToggleMeTwo.Visibility = Visibility.Visible;
 
-                var offset = DateTime.Now - DateTime.UtcNow;
+                if (livetile)
+                {
+                    UpdateLiveTile(myWeatherForecast.city);
+                }
+                else
+                {
+                    TileUpdateManager.CreateTileUpdaterForApplication().Clear();
+                    TileUpdateManager.CreateTileUpdaterForApplication().StopPeriodicUpdate();
+                }
 
-                var uri = String.Format("http://weatherap1.azurewebsites.net/tile/?city={0}&offset={1}", myWeatherForecast.city, offset.Hours.ToString());
                 myWeatherForecast = null;
-
-                var tileContent = new Uri(uri);
-                var requestedInterval = PeriodicUpdateRecurrence.SixHours;
-
-                var updater = TileUpdateManager.CreateTileUpdaterForApplication();
-                updater.StartPeriodicUpdate(tileContent, requestedInterval);
-
 
             }
             catch
@@ -103,9 +104,26 @@ namespace UWP_04
             }
         }
 
+        private void UpdateLiveTile(string city)
+        {
+            var offset = DateTime.Now - DateTime.UtcNow;
+            var uri = String.Format("http://weatherap1.azurewebsites.net/tile/?city={0}&offset={1}", city, offset.Hours.ToString());
+            
+            var tileContent = new Uri(uri);
+            var requestedInterval = PeriodicUpdateRecurrence.SixHours;
+
+            var updater = TileUpdateManager.CreateTileUpdaterForApplication();
+            updater.StartPeriodicUpdate(tileContent, requestedInterval);
+        }
+
         private void Hamburger_Click(object sender, RoutedEventArgs e)
         {
             MySplitView.IsPaneOpen = !MySplitView.IsPaneOpen;
+        }
+
+        private void tswitch_Toggled(object sender, RoutedEventArgs e)
+        {
+            livetile = !livetile;
         }
     }
 }
