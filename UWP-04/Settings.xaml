@@ -39,34 +39,30 @@
                     Click="BackButton_Click"
                     FontFamily="Segoe MDL2 Assets"
                     FontSize="36" 
-                    Content="&#xE1CA;" 
+                    Content="&#xE112;" 
                     RelativePanel.AlignRightWithPanel="True"
                     Margin="5" />
 
         </RelativePanel>
 
         <ToggleSwitch Name="tswitch"
-                      VerticalAlignment="Bottom"
+                      VerticalAlignment="Top"
                       Header="Live Tile"
                       Toggled="tswitch_Toggled"
                       IsOn="{Binding liveti1e), Mode=TwoWay}"
-                      Margin="5,0,0,0"
+                      Margin="20"
                       Grid.Row="1"
-                      Background="Azure"/>
-
-        <ToggleButton Name="tbutton"
-                      Content="LiveTile"
-                      IsThreeState="False"
-                      Click="tswitch_Toggled"
-                      IsChecked="{Binding liveti1e), Mode=TwoWay}"
-                      Grid.Row="1"
-                      Background="Azure" />
+                      Foreground="White"
+                      Background="Black"
+                      BorderBrush="Black"
+                      RequestedTheme="Dark"
+                      />
 
         <SplitView Grid.Row="1"
                    Grid.RowSpan="2"
                    Name="MySplitView"
                    DisplayMode="Inline" 
-                   OpenPaneLength="200">
+                   OpenPaneLength="200" BorderBrush="Black">
             <SplitView.Pane>
                 <ListBox SelectionMode="Single" 
                          SelectionChanged="ListBox_SelectionChanged"
