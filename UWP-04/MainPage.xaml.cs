@@ -21,7 +21,6 @@ namespace UWP_04
 {
     public sealed partial class MainPage : Page
     {
-        bool livetile;
         public MainPage()
         {
             this.InitializeComponent();
@@ -81,7 +80,7 @@ namespace UWP_04
                 ToggleMe.Visibility = Visibility.Visible;
                 ToggleMeTwo.Visibility = Visibility.Visible;
 
-                if (livetile)
+                if ((Application.Current as App).livetile)
                 {
                     UpdateLiveTile(myWeatherForecast.city);
                 }
@@ -121,9 +120,12 @@ namespace UWP_04
             MySplitView.IsPaneOpen = !MySplitView.IsPaneOpen;
         }
 
-        private void tswitch_Toggled(object sender, RoutedEventArgs e)
+        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            livetile = !livetile;
+            if (SettingsList.IsSelected)
+            {
+               Frame.Navigate(typeof(Settings), (Application.Current as App).livetile);
+            }
         }
     }
 }
