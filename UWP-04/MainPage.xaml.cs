@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using UWP_04.Common;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI;
@@ -24,7 +25,7 @@ namespace UWP_04
         public MainPage()
         {
             this.InitializeComponent();
-            //handling status bar visibility
+            //handling status bar
             var statusBar = Windows.UI.ViewManagement.StatusBar.GetForCurrentView();
             statusBar.ForegroundColor = Colors.White;
         }
@@ -33,36 +34,27 @@ namespace UWP_04
         {
             try
             {
-                //toggling visibility
-                ProgressRing.IsActive = true;
-                ProgressRing.Visibility = Visibility.Visible;
-                ToggleMe.Visibility = Visibility.Collapsed;
-                ToggleMeTwo.Visibility = Visibility.Collapsed;
-
-
-                //query api and output stuff
+                toggleStuffWhileLoading(true);
                 var position = await LocationManager.GetPosition();
-
                 WeatherApiProxy.RootObjectApi myWeatherForecast =
                     await WeatherApiProxy.GetWeather(position.Coordinate.Latitude, position.Coordinate.Longitude);
 
-                if (myWeatherForecast == null)
-                {
-                    throw new Exception();
-                }
-                string icon0 = String.Format("ms-appx:///Assets/{0}.png", myWeatherForecast.forecastlist[0].icon);
+                if (myWeatherForecast == null) throw new Exception("No data");
+                //populate "view" with data
+                string icon0 = string.Format("ms-appx:///Assets/{0}.png", myWeatherForecast.forecastlist[0].icon);
                 Day0i.Source = new BitmapImage(new Uri(icon0, UriKind.Absolute));
-                string icon1 = String.Format("ms-appx:///Assets/{0}.png", myWeatherForecast.forecastlist[1].icon);
+                string icon1 = string.Format("ms-appx:///Assets/{0}.png", myWeatherForecast.forecastlist[1].icon);
                 Day1i.Source = new BitmapImage(new Uri(icon1, UriKind.Absolute));
-                string icon2 = String.Format("ms-appx:///Assets/{0}.png", myWeatherForecast.forecastlist[2].icon);
+                string icon2 = string.Format("ms-appx:///Assets/{0}.png", myWeatherForecast.forecastlist[2].icon);
                 Day2i.Source = new BitmapImage(new Uri(icon2, UriKind.Absolute));
-                string icon3 = String.Format("ms-appx:///Assets/{0}.png", myWeatherForecast.forecastlist[3].icon);
+                string icon3 = string.Format("ms-appx:///Assets/{0}.png", myWeatherForecast.forecastlist[3].icon);
                 Day3i.Source = new BitmapImage(new Uri(icon3, UriKind.Absolute));
-                string icon4 = String.Format("ms-appx:///Assets/{0}.png", myWeatherForecast.forecastlist[4].icon);
+                string icon4 = string.Format("ms-appx:///Assets/{0}.png", myWeatherForecast.forecastlist[4].icon);
                 Day4i.Source = new BitmapImage(new Uri(icon4, UriKind.Absolute));
 
                 City.Text = myWeatherForecast.city;
-                Day0.Text = "°" + (myWeatherForecast.forecastlist[0].temp).ToString() + ", " + myWeatherForecast.forecastlist[0].descr;
+                Day0.Text = "°" + (myWeatherForecast.forecastlist[0].temp).ToString()
+                    + ", " + myWeatherForecast.forecastlist[0].descr;
 
                 Day1d.Text = string.Format("{0:dd/MM}", DateTime.Today.AddDays(1));
                 Day2d.Text = string.Format("{0:dd/MM}", DateTime.Today.AddDays(2));
@@ -74,11 +66,8 @@ namespace UWP_04
                 Day3t.Text = "°" + (myWeatherForecast.forecastlist[3].temp).ToString();
                 Day4t.Text = "°" + (myWeatherForecast.forecastlist[4].temp).ToString();
 
-                //toggling visibility
-                ProgressRing.IsActive = false;
-                ProgressRing.Visibility = Visibility.Collapsed;
-                ToggleMe.Visibility = Visibility.Visible;
-                ToggleMeTwo.Visibility = Visibility.Visible;
+                toggleStuffWhileLoading(false);
+                myWeatherForecast = null;
 
                 if ((Application.Current as App).livetile)
                 {
@@ -89,25 +78,18 @@ namespace UWP_04
                     TileUpdateManager.CreateTileUpdaterForApplication().Clear();
                     TileUpdateManager.CreateTileUpdaterForApplication().StopPeriodicUpdate();
                 }
-
-                myWeatherForecast = null;
-
             }
-            catch
+            catch (Exception error)
             {
-                Day0.Text = "Unable to get weather at this time, please try again later.";
-                City.Text = "";
-
-                ProgressRing.IsActive = false;
-                ProgressRing.Visibility = Visibility.Collapsed;
+                throwError(error.Message.ToString());
             }
         }
 
         private void UpdateLiveTile(string city)
         {
             var offset = DateTime.Now - DateTime.UtcNow;
-            var uri = String.Format("http://weatherap1.azurewebsites.net/tile/?city={0}&offset={1}", city, offset.Hours.ToString());
-            
+            var uri = string.Format("http://weatherap1.azurewebsites.net/tile/?city={0}&offset={1}", city, offset.Hours.ToString());
+
             var tileContent = new Uri(uri);
             var requestedInterval = PeriodicUpdateRecurrence.SixHours;
 
@@ -124,8 +106,33 @@ namespace UWP_04
         {
             if (SettingsList.IsSelected)
             {
-               Frame.Navigate(typeof(Settings), (Application.Current as App).livetile);
+                Frame.Navigate(typeof(Settings), (Application.Current as App).livetile);
             }
+        }
+
+        public void toggleStuffWhileLoading(bool toggleStuff)
+        {
+            if (toggleStuff)
+            {
+                ProgressRing.IsActive = true;
+                ProgressRing.Visibility = Visibility.Visible;
+                ToggleMe.Visibility = Visibility.Collapsed;
+                ToggleMeTwo.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                ProgressRing.IsActive = false;
+                ProgressRing.Visibility = Visibility.Collapsed;
+                ToggleMe.Visibility = Visibility.Visible;
+                ToggleMeTwo.Visibility = Visibility.Visible;
+            }
+        }
+
+        public void throwError(string errorText = "try again")
+        {
+            City.Text = errorText;
+            ProgressRing.IsActive = false;
+            ProgressRing.Visibility = Visibility.Collapsed;
         }
     }
 }
