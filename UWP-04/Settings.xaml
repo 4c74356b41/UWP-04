@@ -27,7 +27,7 @@
                     RelativePanel.AlignLeftWithPanel="True"/>
 
             <TextBlock  Name="City"
-                        Text="Loading..."
+                        Text="Settings"
                         FontSize="36"
                         Margin="5"
                         TextAlignment="Center"
@@ -49,7 +49,7 @@
                       VerticalAlignment="Top"
                       Header="Live Tile"
                       Toggled="tswitch_Toggled"
-                      IsOn="{Binding liveti1e), Mode=TwoWay}"
+                      IsOn="{Binding IsOn}"
                       Margin="20"
                       Grid.Row="1"
                       Foreground="White"
