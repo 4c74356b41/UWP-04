@@ -34,12 +34,22 @@ namespace UWP_04
         {
             try
             {
-                toggleStuffWhileLoading(true);
+                toggleUIWhileLoading(true);
+                var myWeatherForecast = new WeatherApiProxy.RootObjectApi();
                 var position = await LocationManager.GetPosition();
-                WeatherApiProxy.RootObjectApi myWeatherForecast =
-                    await WeatherApiProxy.GetWeather(position.Coordinate.Latitude, position.Coordinate.Longitude);
 
-                if (myWeatherForecast == null) throw new Exception("No data");
+                if (position == null)
+                {
+                    myWeatherForecast = await WeatherApiProxy.GetWeather("0.000", "0.000");
+                }
+                else
+                {
+                    myWeatherForecast = await WeatherApiProxy.GetWeather
+                        (position.Coordinate.Latitude.ToString(),
+                        position.Coordinate.Longitude.ToString());
+                }
+
+                if (myWeatherForecast == null) throw new Exception("No data, try again later");
                 //populate "view" with data
                 string icon0 = string.Format("ms-appx:///Assets/{0}.png", myWeatherForecast.forecastlist[0].icon);
                 Day0i.Source = new BitmapImage(new Uri(icon0, UriKind.Absolute));
@@ -66,9 +76,6 @@ namespace UWP_04
                 Day3t.Text = "°" + (myWeatherForecast.forecastlist[3].temp).ToString();
                 Day4t.Text = "°" + (myWeatherForecast.forecastlist[4].temp).ToString();
 
-                toggleStuffWhileLoading(false);
-                myWeatherForecast = null;
-
                 if ((Application.Current as App).livetile)
                 {
                     UpdateLiveTile(myWeatherForecast.city);
@@ -78,6 +85,8 @@ namespace UWP_04
                     TileUpdateManager.CreateTileUpdaterForApplication().Clear();
                     TileUpdateManager.CreateTileUpdaterForApplication().StopPeriodicUpdate();
                 }
+                toggleUIWhileLoading(false);
+                myWeatherForecast = null;
             }
             catch (Exception error)
             {
@@ -110,7 +119,7 @@ namespace UWP_04
             }
         }
 
-        public void toggleStuffWhileLoading(bool toggleStuff)
+        public void toggleUIWhileLoading(bool toggleStuff)
         {
             if (toggleStuff)
             {
@@ -128,7 +137,7 @@ namespace UWP_04
             }
         }
 
-        public void throwError(string errorText = "try again")
+        public void throwError(string errorText = "please try again later")
         {
             City.Text = errorText;
             ProgressRing.IsActive = false;

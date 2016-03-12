@@ -13,7 +13,7 @@ namespace UWP_04
 {
     class WeatherApiProxy
     {
-        public async static Task<RootObjectApi> GetWeather(double lat, double lon)
+        public async static Task<RootObjectApi> GetWeather(string lat, string lon)
         {
             var http = new HttpClient();
             http.Timeout = TimeSpan.FromMilliseconds(15000);
