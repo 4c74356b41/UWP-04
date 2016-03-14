@@ -7,6 +7,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using UWP_04.Common;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Notifications;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -75,7 +76,6 @@ namespace UWP_04
         public Settings()
         {
             this.InitializeComponent();
-            this.DataContext = this;
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
             this.navigationHelper.SaveState += navigationHelper_SaveState;
@@ -89,25 +89,46 @@ namespace UWP_04
 
         private void tswitch_Toggled(object sender, RoutedEventArgs e)
         {
-            (Application.Current as App).livetile = !(Application.Current as App).livetile;
             IsOn = !IsOn;
+
+            if (IsOn)
+            {
+                UpdateLiveTile((Application.Current as App).cityTile);
+            }
+            else
+            {
+                TileUpdateManager.CreateTileUpdaterForApplication().Clear();
+                TileUpdateManager.CreateTileUpdaterForApplication().StopPeriodicUpdate();
+            }
 
             Windows.Storage.ApplicationDataContainer roamingSettings =
                 Windows.Storage.ApplicationData.Current.RoamingSettings;
             roamingSettings.Values["tswitchValue"] = tswitch.IsOn;
         }
 
+        private void UpdateLiveTile(string city)
+        {
+            var offset = DateTime.Now - DateTime.UtcNow;
+            var uri = string.Format("http://weatherap1.azurewebsites.net/tile/?city={0}&offset={1}", city, offset.Hours.ToString());
+
+            var tileContent = new Uri(uri);
+            var requestedInterval = PeriodicUpdateRecurrence.SixHours;
+
+            var updater = TileUpdateManager.CreateTileUpdaterForApplication();
+            updater.StartPeriodicUpdate(tileContent, requestedInterval);
+        }
+
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (LiveTileList.IsSelected)
             {
-                this.Frame.Navigate(typeof(MainPage), (Application.Current as App).livetile);
+                this.Frame.Navigate(typeof(MainPage));
             }
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(MainPage), (Application.Current as App).livetile);
+            this.Frame.Navigate(typeof(MainPage));
         }
 
         private void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
@@ -117,7 +138,6 @@ namespace UWP_04
             if (e.PageState != null && e.PageState.ContainsKey("tswitchValue"))
             {
                 bool.TryParse(e.PageState["tswitchValue"].ToString(), out tempbool);
-                (Application.Current as App).livetile = tempbool;
                 tswitch.IsOn = tempbool;
             }
 
@@ -126,7 +146,6 @@ namespace UWP_04
             if (roamingSettings.Values.ContainsKey("tswitchValue"))
             {
                 bool.TryParse(roamingSettings.Values["tswitchValue"].ToString(), out tempbool);
-                (Application.Current as App).livetile = tempbool;
                 tswitch.IsOn = tempbool;
             }
         }

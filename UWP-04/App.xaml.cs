@@ -31,7 +31,8 @@ namespace UWP_04
             this.InitializeComponent();
             this.Suspending += OnSuspending;
         }
-        public bool livetile { get; set; }
+        public string cityTile { get; set; }
+
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points
         /// will be used such as when the application is launched to open a specific file.

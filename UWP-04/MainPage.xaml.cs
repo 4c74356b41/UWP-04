@@ -62,7 +62,7 @@ namespace UWP_04
                 string icon4 = string.Format("ms-appx:///Assets/{0}.png", myWeatherForecast.forecastlist[4].icon);
                 Day4i.Source = new BitmapImage(new Uri(icon4, UriKind.Absolute));
 
-                City.Text = myWeatherForecast.city;
+                City.Text = (Application.Current as App).cityTile = myWeatherForecast.city;
                 Day0.Text = "°" + (myWeatherForecast.forecastlist[0].temp).ToString()
                     + ", " + myWeatherForecast.forecastlist[0].descr;
 
@@ -76,15 +76,6 @@ namespace UWP_04
                 Day3t.Text = "°" + (myWeatherForecast.forecastlist[3].temp).ToString();
                 Day4t.Text = "°" + (myWeatherForecast.forecastlist[4].temp).ToString();
 
-                if ((Application.Current as App).livetile)
-                {
-                    UpdateLiveTile(myWeatherForecast.city);
-                }
-                else
-                {
-                    TileUpdateManager.CreateTileUpdaterForApplication().Clear();
-                    TileUpdateManager.CreateTileUpdaterForApplication().StopPeriodicUpdate();
-                }
                 toggleUIWhileLoading(false);
                 myWeatherForecast = null;
             }
@@ -92,18 +83,6 @@ namespace UWP_04
             {
                 throwError(error.Message.ToString());
             }
-        }
-
-        private void UpdateLiveTile(string city)
-        {
-            var offset = DateTime.Now - DateTime.UtcNow;
-            var uri = string.Format("http://weatherap1.azurewebsites.net/tile/?city={0}&offset={1}", city, offset.Hours.ToString());
-
-            var tileContent = new Uri(uri);
-            var requestedInterval = PeriodicUpdateRecurrence.SixHours;
-
-            var updater = TileUpdateManager.CreateTileUpdaterForApplication();
-            updater.StartPeriodicUpdate(tileContent, requestedInterval);
         }
 
         private void Hamburger_Click(object sender, RoutedEventArgs e)
@@ -115,7 +94,7 @@ namespace UWP_04
         {
             if (SettingsList.IsSelected)
             {
-                Frame.Navigate(typeof(Settings), (Application.Current as App).livetile);
+                Frame.Navigate(typeof(Settings));
             }
         }
 
