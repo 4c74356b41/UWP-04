@@ -1,31 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using UWP_04.Common;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI;
-using Windows.UI.Notifications;
-using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
-using Windows.UI.Xaml.Navigation;
 
 namespace UWP_04
 {
-    public sealed partial class MainPage : Page
+    public sealed partial class Weather : Page
     {
-        public MainPage()
+        public Weather()
         {
-            this.InitializeComponent();
-            //handling status bar
+            InitializeComponent();
             var statusBar = Windows.UI.ViewManagement.StatusBar.GetForCurrentView();
             statusBar.ForegroundColor = Colors.White;
         }

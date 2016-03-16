@@ -30,8 +30,7 @@
                         Text="Settings"
                         FontSize="36"
                         Margin="5"
-                        TextAlignment="Center"
-                        RelativePanel.RightOf="Hamburger"/>
+                        RelativePanel.AlignHorizontalCenterWithPanel="True"/>
 
             <Button Name="BackButton"
                     Foreground="White"

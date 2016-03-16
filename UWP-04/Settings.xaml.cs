@@ -1,45 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using UWP_04.Common;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Notifications;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace UWP_04
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class Settings : Page, INotifyPropertyChanged
     {
-        private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
-
-        /// <summary>
-        /// This can be changed to a strongly typed view model.
-        /// </summary>
         public ObservableDictionary DefaultViewModel
         {
             get { return this.defaultViewModel; }
         }
 
-        /// <summary>
-        /// NavigationHelper is used on each page to aid in navigation and 
-        /// process lifetime management
-        /// </summary>
+        private NavigationHelper navigationHelper;
         public NavigationHelper NavigationHelper
         {
             get { return this.navigationHelper; }
@@ -75,11 +52,11 @@ namespace UWP_04
 
         public Settings()
         {
-            this.InitializeComponent();
-            this.navigationHelper = new NavigationHelper(this);
-            this.navigationHelper.LoadState += navigationHelper_LoadState;
-            this.navigationHelper.SaveState += navigationHelper_SaveState;
-            this.NavigationCacheMode = NavigationCacheMode.Required;
+            InitializeComponent();
+            navigationHelper = new NavigationHelper(this);
+            navigationHelper.LoadState += navigationHelper_LoadState;
+            navigationHelper.SaveState += navigationHelper_SaveState;
+            NavigationCacheMode = NavigationCacheMode.Required;
         }
 
         private void Hamburger_Click(object sender, RoutedEventArgs e)
@@ -122,13 +99,13 @@ namespace UWP_04
         {
             if (LiveTileList.IsSelected)
             {
-                this.Frame.Navigate(typeof(MainPage));
+                this.Frame.Navigate(typeof(Weather));
             }
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(MainPage));
+            this.Frame.Navigate(typeof(Weather));
         }
 
         private void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
