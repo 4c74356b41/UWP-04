@@ -49,7 +49,8 @@ namespace UWP_04
 
                 City.Text = (Application.Current as App).cityTile = myWeatherForecast.city;
                 Day0.Text = "°" + (myWeatherForecast.forecastlist[0].temp).ToString()
-                    + ", " + myWeatherForecast.forecastlist[0].descr;
+                    + ", " + myWeatherForecast.forecastlist[0].descr
+                    + (Application.Current as App).tempFormat;
 
                 Day1d.Text = string.Format("{0:dd/MM}", DateTime.Today.AddDays(1));
                 Day2d.Text = string.Format("{0:dd/MM}", DateTime.Today.AddDays(2));

@@ -125,11 +125,44 @@ namespace UWP_04
                 bool.TryParse(roamingSettings.Values["tswitchValue"].ToString(), out tempbool);
                 tswitch.IsOn = tempbool;
             }
+
+            if (e.PageState != null && e.PageState.ContainsKey("tempValue"))
+            {
+                switch (e.PageState["tempValue"].ToString())
+                {
+                    case "Celsius":
+                        Celsius.IsSelected = true;
+                        break;
+                    case "Kelvin":
+                        Kelvin.IsSelected = true;
+                        break;
+                    case "Fahrenheit":
+                        Fahrenheit.IsSelected = true;
+                        break;
+                }
+            }
+
+            if (roamingSettings.Values.ContainsKey("tempValue"))
+            {
+                switch (roamingSettings.Values["tempValue"].ToString())
+                {
+                    case "Celsius":
+                        Celsius.IsSelected = true;
+                        break;
+                    case "Kelvin":
+                        Kelvin.IsSelected = true;
+                        break;
+                    case "Fahrenheit":
+                        Fahrenheit.IsSelected = true;
+                        break;
+                }
+            }
         }
 
         private void navigationHelper_SaveState(object sender, SaveStateEventArgs e)
         {
             e.PageState["tswitchValue"] = tswitch.IsOn;
+            e.PageState["tempValue"] = (Application.Current as App).tempFormat;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -142,5 +175,24 @@ namespace UWP_04
             navigationHelper.OnNavigatedFrom(e);
         }
 
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (Celsius.IsSelected)
+            {
+                (Application.Current as App).tempFormat = "Celsius";
+            }
+            else if (Kelvin.IsSelected)
+            {
+                (Application.Current as App).tempFormat = "Kelvin";
+            }
+            else
+            {
+                (Application.Current as App).tempFormat = "Fahrenheit";
+            }
+
+            Windows.Storage.ApplicationDataContainer roamingSettings =
+               Windows.Storage.ApplicationData.Current.RoamingSettings;
+            roamingSettings.Values["tempValue"] = (Application.Current as App).tempFormat;
+        }
     }
 }

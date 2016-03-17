@@ -44,6 +44,7 @@
 
         </RelativePanel>
 
+        <RelativePanel Grid.Row="1">
         <ToggleSwitch Name="tswitch"
                       VerticalAlignment="Top"
                       Header="Live Tile"
@@ -56,7 +57,23 @@
                       BorderBrush="Black"
                       RequestedTheme="Dark"
                       />
-
+            
+            <ComboBox SelectionChanged="ComboBox_SelectionChanged"
+                      RelativePanel.Below="tswitch"
+                      Margin="10"
+                      Width="250"
+                      Foreground="White"
+                      Background="Black"
+                      BorderBrush="Black"
+                      RequestedTheme="Dark"
+                      PlaceholderText="Choose Temperature Scale"
+                      >
+                <ComboBoxItem Name="Celsius">°C</ComboBoxItem>
+                <ComboBoxItem Name="Kelvin">K</ComboBoxItem>
+                <ComboBoxItem Name="Fahrenheit">F</ComboBoxItem>
+            </ComboBox>
+        </RelativePanel>
+        
         <SplitView Grid.Row="1"
                    Grid.RowSpan="2"
                    Name="MySplitView"
@@ -70,7 +87,6 @@
                         <StackPanel Orientation="Horizontal">
                             <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="24" Text="&#xE2AC;"/>
                             <TextBlock FontSize="16" Margin="20,0,0,0">Weather</TextBlock>
-
                         </StackPanel>
                     </ListBoxItem>
                     <ListBoxItem Name="SettingsList">
