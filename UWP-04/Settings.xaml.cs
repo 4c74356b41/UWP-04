@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using UWP_04.Common;
 using Windows.UI.Notifications;
 using Windows.UI.Xaml;
@@ -13,13 +14,13 @@ namespace UWP_04
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
         public ObservableDictionary DefaultViewModel
         {
-            get { return this.defaultViewModel; }
+            get { return defaultViewModel; }
         }
 
         private NavigationHelper navigationHelper;
         public NavigationHelper NavigationHelper
         {
-            get { return this.navigationHelper; }
+            get { return navigationHelper; }
         }
 
         private bool _IsOn;
@@ -31,7 +32,6 @@ namespace UWP_04
             {
                 return this._IsOn;
             }
-
             set
             {
                 if (value != this._IsOn)
@@ -74,8 +74,8 @@ namespace UWP_04
             }
             else
             {
-                TileUpdateManager.CreateTileUpdaterForApplication().Clear();
                 TileUpdateManager.CreateTileUpdaterForApplication().StopPeriodicUpdate();
+                TileUpdateManager.CreateTileUpdaterForApplication().Clear();
             }
 
             Windows.Storage.ApplicationDataContainer roamingSettings =
@@ -97,15 +97,15 @@ namespace UWP_04
 
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (LiveTileList.IsSelected)
+            if (WeatherList.IsSelected)
             {
-                this.Frame.Navigate(typeof(Weather));
+                Frame.Navigate(typeof(Weather));
             }
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(Weather));
+            Frame.Navigate(typeof(Weather));
         }
 
         private void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
@@ -157,12 +157,23 @@ namespace UWP_04
                         break;
                 }
             }
+
+            if (e.PageState != null && e.PageState.ContainsKey("citySelected"))
+            {
+                asb.Text = (Application.Current as App).cityFind = roamingSettings.Values["citySelected"].ToString();
+            }
+
+            if (roamingSettings.Values.ContainsKey("citySelected"))
+            {
+                asb.Text = (Application.Current as App).cityFind = roamingSettings.Values["citySelected"].ToString();
+            }
         }
 
         private void navigationHelper_SaveState(object sender, SaveStateEventArgs e)
         {
             e.PageState["tswitchValue"] = tswitch.IsOn;
             e.PageState["tempValue"] = (Application.Current as App).tempFormat;
+            e.PageState["citySelected"] = (Application.Current as App).cityFind;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -189,10 +200,41 @@ namespace UWP_04
             {
                 (Application.Current as App).tempFormat = "Fahrenheit";
             }
-
             Windows.Storage.ApplicationDataContainer roamingSettings =
                Windows.Storage.ApplicationData.Current.RoamingSettings;
             roamingSettings.Values["tempValue"] = (Application.Current as App).tempFormat;
+        }
+
+        private void asb_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+        {
+            if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
+            {
+                var matchingCities = CitiesSampleSource.GetMatchingCities(sender.Text);
+                sender.ItemsSource = matchingCities.ToList();
+            }
+        }
+
+        private void asb_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        {
+            if (args.ChosenSuggestion != null)
+            {
+                //User selected an item, take an action on it here
+                Windows.Storage.ApplicationDataContainer roamingSettings =
+               Windows.Storage.ApplicationData.Current.RoamingSettings;
+                roamingSettings.Values["citySelected"] = (Application.Current as App).cityFind
+                    = args.ChosenSuggestion.ToString();
+            }
+            else
+            {
+                //Do a fuzzy search on the query text
+                var matchingContacts = CitiesSampleSource.GetMatchingCities(args.QueryText);
+            }
+        }
+
+        private void asb_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
+        {
+            var city = args.SelectedItem as City;
+            sender.Text = string.Format("{0} ", city.CityName);
         }
     }
 }

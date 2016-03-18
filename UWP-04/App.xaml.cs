@@ -15,6 +15,7 @@ namespace UWP_04
             this.Suspending += OnSuspending;
         }
         public string cityTile { get; set; }
+        public string cityFind { get; set; }
         public string tempFormat { get; set; }
 
         protected async override void OnLaunched(LaunchActivatedEventArgs e)

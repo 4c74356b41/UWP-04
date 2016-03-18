@@ -13,15 +13,22 @@ namespace UWP_04
         {
             var http = new HttpClient();
             http.Timeout = TimeSpan.FromMilliseconds(15000);
+            var url = string.Format("http://weatherap1.azurewebsites.net/?lat={0}&lon={1}", lat, lon);
 
-            var url = String.Format("http://weatherap1.azurewebsites.net/?lat={0}&lon={1}", lat, lon);
-            var response = await http.GetAsync(url);
-            var result = await response.Content.ReadAsStringAsync();
-            var data = JsonConvert.DeserializeObject<List<RootObjectApi>>(result);
-            
-            return data[0];
+            try
+            {
+                var response = await http.GetAsync(url);
+                var result = await response.Content.ReadAsStringAsync();
+                var data = JsonConvert.DeserializeObject<List<RootObjectApi>>(result);
+
+                return data[0];
+            }
+            catch (Exception)
+            {
+                throw new Exception("WebApi unreachable, try again later");
+            }
         }
-        
+
         [DataContract]
         public class Forecastlist
         {

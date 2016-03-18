@@ -51,27 +51,35 @@
                       Toggled="tswitch_Toggled"
                       IsOn="{Binding IsOn}"
                       Margin="20"
-                      Grid.Row="1"
-                      Foreground="White"
-                      Background="Black"
-                      BorderBrush="Black"
                       RequestedTheme="Dark"
                       />
             
-            <ComboBox SelectionChanged="ComboBox_SelectionChanged"
+            <ComboBox Name="ComboBox"
+                      SelectionChanged="ComboBox_SelectionChanged"
                       RelativePanel.Below="tswitch"
-                      Margin="10"
-                      Width="250"
-                      Foreground="White"
-                      Background="Black"
-                      BorderBrush="Black"
+                      Margin="20"
+                      MinWidth="250"
                       RequestedTheme="Dark"
-                      PlaceholderText="Choose Temperature Scale"
+                      PlaceholderText="Celsius"
+                      Header="Choose Temperature Scale"
                       >
-                <ComboBoxItem Name="Celsius">°C</ComboBoxItem>
-                <ComboBoxItem Name="Kelvin">K</ComboBoxItem>
-                <ComboBoxItem Name="Fahrenheit">F</ComboBoxItem>
+                      <ComboBoxItem Name="Celsius">°C</ComboBoxItem>
+                      <ComboBoxItem Name="Kelvin">K</ComboBoxItem>
+                      <ComboBoxItem Name="Fahrenheit">F</ComboBoxItem>
             </ComboBox>
+
+            <AutoSuggestBox x:Name="asb"
+                      PlaceholderText="Get Weather in Specified City"
+                      TextChanged="asb_TextChanged"
+                      QueryIcon="Find"
+                      QuerySubmitted="asb_QuerySubmitted"
+                      SuggestionChosen="asb_SuggestionChosen"
+                      Margin="20"
+                      MinWidth="250"
+                      RelativePanel.Below="ComboBox" 
+                      RequestedTheme="Dark"
+                      />
+
         </RelativePanel>
         
         <SplitView Grid.Row="1"
@@ -83,7 +91,7 @@
                 <ListBox SelectionMode="Single" 
                          SelectionChanged="ListBox_SelectionChanged"
                          Background="#1F1F1F">
-                    <ListBoxItem Name="LiveTileList" Height="auto">
+                    <ListBoxItem Name="WeatherList" Height="auto">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="24" Text="&#xE2AC;"/>
                             <TextBlock FontSize="16" Margin="20,0,0,0">Weather</TextBlock>
