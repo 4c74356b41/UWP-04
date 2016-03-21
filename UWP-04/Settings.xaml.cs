@@ -9,7 +9,7 @@ using Windows.UI.Xaml.Navigation;
 
 namespace UWP_04
 {
-    public sealed partial class Settings : Page, INotifyPropertyChanged
+    public sealed partial class Settings : Page
     {
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
         public ObservableDictionary DefaultViewModel
@@ -21,33 +21,6 @@ namespace UWP_04
         public NavigationHelper NavigationHelper
         {
             get { return navigationHelper; }
-        }
-
-        private bool _IsOn;
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public bool IsOn
-        {
-            get
-            {
-                return this._IsOn;
-            }
-            set
-            {
-                if (value != this._IsOn)
-                {
-                    this._IsOn = value;
-                    NotifyPropertyChanged("IsOn");
-                }
-            }
-        }
-
-        private void NotifyPropertyChanged(string info)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(info));
-            }
         }
 
         public Settings()
@@ -66,9 +39,7 @@ namespace UWP_04
 
         private void tswitch_Toggled(object sender, RoutedEventArgs e)
         {
-            IsOn = !IsOn;
-
-            if (IsOn)
+            if (tswitch.IsOn)
             {
                 UpdateLiveTile((Application.Current as App).cityTile);
             }
