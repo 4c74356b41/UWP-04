@@ -15,7 +15,6 @@
         </Grid.RowDefinitions>
 
         <RelativePanel Background="#1F1F1F" >
-
             <Button Name="Hamburger"
                     Foreground="White"
                     FontFamily="Segoe MDL2 Assets"
@@ -41,7 +40,6 @@
                     Content="&#xE112;" 
                     RelativePanel.AlignRightWithPanel="True"
                     Margin="5" />
-
         </RelativePanel>
 
         <RelativePanel Grid.Row="1">
@@ -49,7 +47,6 @@
                       VerticalAlignment="Top"
                       Header="Live Tile"
                       Toggled="tswitch_Toggled"
-                      IsOn="{Binding IsOn}"
                       Margin="20"
                       RequestedTheme="Dark"
                       />
@@ -60,12 +57,12 @@
                       Margin="20"
                       MinWidth="250"
                       RequestedTheme="Dark"
-                      PlaceholderText="Celsius"
+                      PlaceholderText="°C"
                       Header="Choose Temperature Scale"
                       >
-                      <ComboBoxItem Name="Celsius">°C</ComboBoxItem>
-                      <ComboBoxItem Name="Kelvin">K</ComboBoxItem>
-                      <ComboBoxItem Name="Fahrenheit">F</ComboBoxItem>
+                <ComboBoxItem Name="Celsius">°C</ComboBoxItem>
+                <ComboBoxItem Name="Kelvin">K</ComboBoxItem>
+                <ComboBoxItem Name="Fahrenheit">F</ComboBoxItem>
             </ComboBox>
 
             <AutoSuggestBox x:Name="asb"
@@ -79,7 +76,6 @@
                       RelativePanel.Below="ComboBox" 
                       RequestedTheme="Dark"
                       />
-
         </RelativePanel>
         
         <SplitView Grid.Row="1"
@@ -106,6 +102,5 @@
                 </ListBox>
             </SplitView.Pane>
         </SplitView>
-
     </Grid>
 </Page>

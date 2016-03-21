@@ -16,7 +16,6 @@
         </Grid.RowDefinitions>
 
         <RelativePanel Background="#1F1F1F" >
-
             <Button Name="Hamburger"
                     Foreground="White"
                     FontFamily="Segoe MDL2 Assets"
@@ -41,7 +40,6 @@
                     Content="&#xE1CA;" 
                     RelativePanel.AlignRightWithPanel="True"
                     Margin="5" />
-
         </RelativePanel>
 
         <RelativePanel Name="ToggleMe"
@@ -60,7 +58,6 @@
                    RelativePanel.AlignHorizontalCenterWithPanel="True"
                    Width="200"
                    Height="200" />
-
         </RelativePanel>
 
         <ScrollViewer VerticalAlignment="Bottom"

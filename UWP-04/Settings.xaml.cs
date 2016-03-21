@@ -45,8 +45,7 @@ namespace UWP_04
             }
             else
             {
-                TileUpdateManager.CreateTileUpdaterForApplication().StopPeriodicUpdate();
-                TileUpdateManager.CreateTileUpdaterForApplication().Clear();
+                RemoveLiveTile();
             }
 
             Windows.Storage.ApplicationDataContainer roamingSettings =
@@ -64,6 +63,12 @@ namespace UWP_04
 
             var updater = TileUpdateManager.CreateTileUpdaterForApplication();
             updater.StartPeriodicUpdate(tileContent, requestedInterval);
+        }
+
+        private void RemoveLiveTile()
+        {
+            TileUpdateManager.CreateTileUpdaterForApplication().StopPeriodicUpdate();
+            TileUpdateManager.CreateTileUpdaterForApplication().Clear();
         }
 
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -159,21 +164,20 @@ namespace UWP_04
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            Windows.Storage.ApplicationDataContainer roamingSettings =
+               Windows.Storage.ApplicationData.Current.RoamingSettings;
             if (Celsius.IsSelected)
             {
-                (Application.Current as App).tempFormat = "Celsius";
+                roamingSettings.Values["tempValue"] = (Application.Current as App).tempFormat = "Celsius";
             }
             else if (Kelvin.IsSelected)
             {
-                (Application.Current as App).tempFormat = "Kelvin";
+                roamingSettings.Values["tempValue"] = (Application.Current as App).tempFormat = "Kelvin";
             }
             else
             {
-                (Application.Current as App).tempFormat = "Fahrenheit";
+                roamingSettings.Values["tempValue"] = (Application.Current as App).tempFormat = "Fahrenheit";
             }
-            Windows.Storage.ApplicationDataContainer roamingSettings =
-               Windows.Storage.ApplicationData.Current.RoamingSettings;
-            roamingSettings.Values["tempValue"] = (Application.Current as App).tempFormat;
         }
 
         private void asb_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
@@ -189,9 +193,8 @@ namespace UWP_04
         {
             if (args.ChosenSuggestion != null)
             {
-                //User selected an item, take an action on it here
                 Windows.Storage.ApplicationDataContainer roamingSettings =
-               Windows.Storage.ApplicationData.Current.RoamingSettings;
+                    Windows.Storage.ApplicationData.Current.RoamingSettings;
                 roamingSettings.Values["citySelected"] = (Application.Current as App).cityFind
                     = args.ChosenSuggestion.ToString();
             }
