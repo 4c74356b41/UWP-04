@@ -107,13 +107,13 @@ namespace UWP_04
                 switch (e.PageState["tempValue"].ToString())
                 {
                     case "Celsius":
-                        Celsius.IsSelected = true;
+                        ComboBox.SelectedItem = Celsius;
                         break;
                     case "Kelvin":
-                        Kelvin.IsSelected = true;
+                        ComboBox.SelectedItem = Kelvin;
                         break;
                     case "Fahrenheit":
-                        Fahrenheit.IsSelected = true;
+                        ComboBox.SelectedItem = Fahrenheit;
                         break;
                 }
             }
@@ -123,13 +123,13 @@ namespace UWP_04
                 switch (roamingSettings.Values["tempValue"].ToString())
                 {
                     case "Celsius":
-                        Celsius.IsSelected = true;
+                        ComboBox.SelectedItem = Celsius;
                         break;
                     case "Kelvin":
-                        Kelvin.IsSelected = true;
+                        ComboBox.SelectedItem = Kelvin;
                         break;
                     case "Fahrenheit":
-                        Fahrenheit.IsSelected = true;
+                        ComboBox.SelectedItem = Fahrenheit;
                         break;
                 }
             }
