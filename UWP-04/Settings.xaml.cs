@@ -39,14 +39,21 @@ namespace UWP_04
 
         private void tswitch_Toggled(object sender, RoutedEventArgs e)
         {
-            UpdateLiveTile((Application.Current as App).cityTile, tswitch.IsOn.ToString());
+            if (tswitch.IsOn)
+            {
+                UpdateLiveTile((Application.Current as App).cityTile);
+            }
+            else
+            {
+                RemoveLiveTile();
+            }
 
             Windows.Storage.ApplicationDataContainer roamingSettings =
                 Windows.Storage.ApplicationData.Current.RoamingSettings;
             roamingSettings.Values["tswitchValue"] = tswitch.IsOn;
         }
 
-        private void UpdateLiveTile(string city, string trigger)
+        private void UpdateLiveTile(string city)
         {
             var offset = DateTime.Now - DateTime.UtcNow;
             var uri = string.Format("http://weatherap1.azurewebsites.net/tile/?city={0}&offset={1}", city, offset.Hours.ToString());
@@ -56,12 +63,12 @@ namespace UWP_04
 
             var updater = TileUpdateManager.CreateTileUpdaterForApplication();
             updater.StartPeriodicUpdate(tileContent, requestedInterval);
+        }
 
-            if (trigger == "False")
-            {
-                TileUpdateManager.CreateTileUpdaterForApplication().StopPeriodicUpdate();
-                TileUpdateManager.CreateTileUpdaterForApplication().Clear();
-            }
+        private void RemoveLiveTile()
+        {
+            TileUpdateManager.CreateTileUpdaterForApplication().StopPeriodicUpdate();
+            TileUpdateManager.CreateTileUpdaterForApplication().Clear();
         }
 
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
