@@ -35,6 +35,14 @@ namespace UWP_04
         private void Hamburger_Click(object sender, RoutedEventArgs e)
         {
             MySplitView.IsPaneOpen = !MySplitView.IsPaneOpen;
+            if (WeatherList.IsSelected)
+            {
+                WeatherList.IsSelected = false;
+            }
+            else
+            {
+                SettingsList.IsSelected = false;
+            }
         }
 
         private void tswitch_Toggled(object sender, RoutedEventArgs e)
@@ -75,6 +83,8 @@ namespace UWP_04
         {
             if (WeatherList.IsSelected)
             {
+                WeatherList.IsSelected = false;
+                MySplitView.IsPaneOpen = false;
                 Frame.Navigate(typeof(Weather));
             }
         }

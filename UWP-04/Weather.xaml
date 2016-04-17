@@ -132,7 +132,7 @@
                 <ListBox SelectionMode="Single" 
                          SelectionChanged="ListBox_SelectionChanged"
                          Background="#1F1F1F">
-                    <ListBoxItem Name="LiveTile" Height="auto">
+                    <ListBoxItem Name="WeatherList" Height="auto">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="24" Text="&#xE2AC;"/>
                             <TextBlock FontSize="16" Margin="20,0,0,0">Weather</TextBlock>

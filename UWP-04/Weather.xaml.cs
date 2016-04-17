@@ -26,7 +26,7 @@ namespace UWP_04
         public Weather()
         {
             InitializeComponent();
-            //Windows.UI.ViewManagement.StatusBar.GetForCurrentView().ForegroundColor = Colors.Black;
+            Windows.UI.ViewManagement.StatusBar.GetForCurrentView().ForegroundColor = Colors.White;
             navigationHelper = new NavigationHelper(this);
             navigationHelper.LoadState += navigationHelper_LoadState;
             navigationHelper.SaveState += navigationHelper_SaveState;
@@ -141,12 +141,22 @@ namespace UWP_04
         private void Hamburger_Click(object sender, RoutedEventArgs e)
         {
             MySplitView.IsPaneOpen = !MySplitView.IsPaneOpen;
+            if (WeatherList.IsSelected)
+            {
+                WeatherList.IsSelected = false;
+            }
+            else
+            {
+                SettingsList.IsSelected = false;
+            }
         }
 
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (SettingsList.IsSelected)
             {
+                SettingsList.IsSelected = false;
+                MySplitView.IsPaneOpen = false;
                 Frame.Navigate(typeof(Settings));
             }
         }
